@@ -1,0 +1,110 @@
+{
+  "container_registry": {
+    "url": "your-registry.amazonaws.com",
+    "namespace": "mlops-models",
+    "authentication": {
+      "type": "aws_ecr"
+    }
+  },
+  "kubernetes": {
+    "enabled": true,
+    "cluster_name": "mlops-cluster",
+    "context": "mlops-context",
+    "ingress": {
+      "enabled": true,
+      "class": "nginx",
+      "tls_enabled": true
+    }
+  },
+  "aws": {
+    "region": "us-west-2",
+    "ecs": {
+      "cluster_name": "mlops-ecs-cluster",
+      "service_discovery": {
+        "enabled": true,
+        "namespace": "mlops.local"
+      }
+    },
+    "lambda": {
+      "runtime": "python3.9",
+      "timeout": 30,
+      "memory": 512,
+      "environment_variables": {
+        "MLFLOW_TRACKING_URI": "http://mlflow.mlops.local:5000"
+      }
+    }
+  },
+  "mlflow": {
+    "tracking_uri": "http://mlflow.mlops.local:5000",
+    "artifact_location": "s3://mlops-artifacts/models"
+  },
+  "environments": {
+    "dev": {
+      "namespace": "mlops-dev",
+      "replicas": {
+        "min": 1,
+        "max": 3
+      },
+      "resources": {
+        "cpu_request": "100m",
+        "cpu_limit": "500m",
+        "memory_request": "256Mi",
+        "memory_limit": "512Mi"
+      }
+    },
+    "staging": {
+      "namespace": "mlops-staging",
+      "replicas": {
+        "min": 2,
+        "max": 5
+      },
+      "resources": {
+        "cpu_request": "200m",
+        "cpu_limit": "1000m",
+        "memory_request": "512Mi",
+        "memory_limit": "1Gi"
+      }
+    },
+    "prod": {
+      "namespace": "mlops-prod",
+      "replicas": {
+        "min": 3,
+        "max": 20
+      },
+      "resources": {
+        "cpu_request": "500m",
+        "cpu_limit": "2000m",
+        "memory_request": "1Gi",
+        "memory_limit": "4Gi"
+      }
+    }
+  },
+  "monitoring": {
+    "prometheus": {
+      "enabled": true,
+      "scrape_interval": "30s"
+    },
+    "grafana": {
+      "enabled": true,
+      "dashboard_provisioning": true
+    },
+    "alerting": {
+      "enabled": true,
+      "channels": ["slack", "email"]
+    }
+  },
+  "security": {
+    "network_policies": {
+      "enabled": true,
+      "default_deny": true
+    },
+    "pod_security": {
+      "run_as_non_root": true,
+      "read_only_root_filesystem": true
+    },
+    "secrets": {
+      "encryption_at_rest": true,
+      "auto_rotation": true
+    }
+  }
+}

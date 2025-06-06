@@ -1,0 +1,107 @@
+{
+  "mlflow": {
+    "tracking_uri": "http://localhost:5000"
+  },
+  "monitoring_interval": 300,
+  "drift_detection": {
+    "enabled": true,
+    "reference_window": 7,
+    "detection_window": 1,
+    "check_interval": 3600,
+    "thresholds": {
+      "ks_test": 0.05,
+      "psi": 0.1,
+      "wasserstein": 0.3
+    }
+  },
+  "performance_thresholds": {
+    "accuracy": 0.7,
+    "precision": 0.65,
+    "recall": 0.6,
+    "f1_score": 0.65,
+    "error_rate": 0.1,
+    "latency": 1.0
+  },
+  "alerting": {
+    "channels": ["slack", "email"],
+    "email": {
+      "enabled": false,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "use_tls": true,
+      "from": "mlops-monitor@company.com",
+      "to": ["ml-team@company.com", "devops@company.com"],
+      "username": "your-email@gmail.com",
+      "password": "your-app-password"
+    },
+    "slack": {
+      "enabled": true,
+      "webhook_url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+      "channel": "#ml-alerts",
+      "username": "MLOps Monitor"
+    },
+    "severity_mapping": {
+      "critical": ["email", "slack"],
+      "high": ["slack"],
+      "medium": ["slack"],
+      "low": []
+    }
+  },
+  "prometheus": {
+    "enabled": true,
+    "pushgateway": "localhost:9091",
+    "scrape_interval": "30s",
+    "retention": "15d"
+  },
+  "redis": {
+    "enabled": true,
+    "host": "localhost",
+    "port": 6379,
+    "db": 0,
+    "ttl": 86400
+  },
+  "business_metrics": {
+    "cost_per_prediction": 0.01,
+    "cost_per_false_positive": 50.0,
+    "cost_per_false_negative": 100.0,
+    "sla_targets": {
+      "availability": 0.99,
+      "latency_p95": 500,
+      "accuracy": 0.8
+    }
+  },
+  "ab_testing": {
+    "enabled": true,
+    "min_sample_size": 1000,
+    "confidence_level": 0.95,
+    "statistical_power": 0.8,
+    "analysis_window": 7
+  },
+  "data_quality": {
+    "enabled": true,
+    "checks": [
+      "missing_values",
+      "data_types",
+      "value_ranges",
+      "duplicate_records"
+    ],
+    "thresholds": {
+      "missing_value_ratio": 0.05,
+      "duplicate_ratio": 0.01
+    }
+  },
+  "model_governance": {
+    "enabled": true,
+    "approval_required_for_prod": true,
+    "required_metrics": ["accuracy", "precision", "recall", "f1_score"],
+    "minimum_test_coverage": 0.8,
+    "bias_testing_required": true
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file": "logs/monitoring.log",
+    "max_file_size": "10MB",
+    "backup_count": 5
+  }
+}

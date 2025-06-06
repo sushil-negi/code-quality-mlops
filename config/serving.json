@@ -1,0 +1,43 @@
+{
+  "mlflow": {
+    "tracking_uri": "http://localhost:5000"
+  },
+  "default_model": "simple_bug_predictor",
+  "model_cache_ttl": 3600,
+  "preload_models": ["simple_bug_predictor", "hybrid_bug_predictor"],
+  "ab_testing": {
+    "enabled": true,
+    "traffic_split": 0.5,
+    "model_a": "simple_bug_predictor",
+    "model_b": "hybrid_bug_predictor"
+  },
+  "redis": {
+    "enabled": false,
+    "host": "localhost",
+    "port": 6379,
+    "db": 0
+  },
+  "monitoring": {
+    "metrics_enabled": true,
+    "logging_enabled": true,
+    "health_check_interval": 30
+  },
+  "scaling": {
+    "min_instances": 1,
+    "max_instances": 10,
+    "target_cpu_utilization": 70,
+    "scale_up_cooldown": 300,
+    "scale_down_cooldown": 600
+  },
+  "security": {
+    "cors_origins": ["*"],
+    "rate_limiting": {
+      "enabled": false,
+      "requests_per_minute": 1000
+    },
+    "authentication": {
+      "enabled": false,
+      "type": "api_key"
+    }
+  }
+}
